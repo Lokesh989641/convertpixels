@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PNG to JPG Converter - ConvertPixels</title>
+
+    <meta
+        name="description"
+        content="Convert PNG images to JPG format online for free with ConvertPixels. Fast, secure and easy to use."
+    >
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar">
+        <a href="../index.html" class="logo">ConvertPixels</a>
+
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#tools">Tools</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="converter-page">
+
+    <h1>PNG to JPG Converter</h1>
+
+    <p class="converter-description">
+        Convert PNG images to JPG format quickly and for free.
+    </p>
+
+    <div class="converter-box">
+
+        <label for="imageInput" class="upload-area">
+            <span>📁</span>
+
+            <strong>Choose a PNG image</strong>
+
+            <small>
+                Click here to select your PNG file
+            </small>
+        </label>
+
+        <input
+            type="file"
+            id="imageInput"
+            accept="image/png"
+        >
+
+        <div id="preview"></div>
+
+        <button id="convertBtn" disabled>
+            Convert to JPG
+        </button>
+
+        <a
+            id="downloadBtn"
+            class="download-btn"
+            style="display: none;"
+        >
+            Download JPG
+        </a>
+
+    </div>
+
+</main>
+
+<script src="../js/png-to-jpg.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resize Image Online - ConvertPixels</title>
+    <meta name="description" content="Resize JPG and PNG images online for free. Set custom image dimensions with ConvertPixels.">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar">
+        <a href="../index.html" class="logo">ConvertPixels</a>
+
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#tools">Tools</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="converter-page">
+
+    <h1>Resize Image Online</h1>
+
+    <p class="converter-description">
+        Resize JPG and PNG images to your preferred dimensions for free.
+    </p>
+
+    <div class="converter-box">
+
+        <label for="imageInput" class="upload-area">
+            <span>📐</span>
+            <strong>Choose an image</strong>
+            <small>Select a JPG or PNG file</small>
+        </label>
+
+        <input
+            type="file"
+            id="imageInput"
+            accept="image/jpeg,image/png"
+        >
+
+        <div id="preview"></div>
+
+        <div class="resize-controls">
+
+            <div>
+                <label for="width">Width (px)</label>
+                <input type="number" id="width" min="1">
+            </div>
+
+            <div>
+                <label for="height">Height (px)</label>
+                <input type="number" id="height" min="1">
+            </div>
+
+        </div>
+
+        <label class="aspect-control">
+            <input type="checkbox" id="lockRatio" checked>
+            Maintain aspect ratio
+        </label>
+
+        <button id="resizeBtn" disabled>
+            Resize Image
+        </button>
+
+        <a
+            id="downloadBtn"
+            class="download-btn"
+            style="display:none;"
+        >
+            Download Resized Image
+        </a>
+
+    </div>
+
+</main>
+
+<script src="../js/resize-image.js"></script>
+
+</body>
+</html>

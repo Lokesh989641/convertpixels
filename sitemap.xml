@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://YOUR-GITHUB-USERNAME.github.io/convertpixels/</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-GITHUB-USERNAME.github.io/convertpixels/tools/png-to-jpg.html</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-GITHUB-USERNAME.github.io/convertpixels/tools/jpg-to-png.html</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-GITHUB-USERNAME.github.io/convertpixels/tools/webp-to-jpg.html</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-GITHUB-USERNAME.github.io/convertpixels/tools/jpg-to-webp.html</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-GITHUB-USERNAME.github.io/convertpixels/tools/image-to-pdf.html</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-GITHUB-USERNAME.github.io/convertpixels/tools/compress-image.html</loc>
+    </url>
+
+    <url>
+        <loc>https://YOUR-GITHUB-USERNAME.github.io/convertpixels/tools/resize-image.html</loc>
+    </url>
+
+</urlset>

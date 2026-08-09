@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Compress Image Online - ConvertPixels</title>
+    <meta name="description" content="Compress JPG and PNG images online for free. Reduce image file size quickly with ConvertPixels.">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar">
+        <a href="../index.html" class="logo">ConvertPixels</a>
+
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#tools">Tools</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="converter-page">
+
+    <h1>Compress Image Online</h1>
+
+    <p class="converter-description">
+        Reduce JPG and PNG image file sizes while keeping good quality.
+    </p>
+
+    <div class="converter-box">
+
+        <label for="imageInput" class="upload-area">
+            <span>🗜️</span>
+            <strong>Choose an image</strong>
+            <small>Select a JPG or PNG file</small>
+        </label>
+
+        <input
+            type="file"
+            id="imageInput"
+            accept="image/jpeg,image/png"
+        >
+
+        <div id="preview"></div>
+
+        <div class="quality-control">
+            <label for="quality">
+                Quality: <strong id="qualityValue">80%</strong>
+            </label>
+
+            <input
+                type="range"
+                id="quality"
+                min="10"
+                max="100"
+                value="80"
+            >
+        </div>
+
+        <button id="compressBtn" disabled>
+            Compress Image
+        </button>
+
+        <div id="result"></div>
+
+        <a
+            id="downloadBtn"
+            class="download-btn"
+            style="display:none;"
+        >
+            Download Compressed Image
+        </a>
+
+    </div>
+
+</main>
+
+<script src="../js/compress-image.js"></script>
+
+</body>
+</html>
