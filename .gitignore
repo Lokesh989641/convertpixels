@@ -7,3 +7,5 @@ android/capacitor-cordova-android-plugins/build/
 *.iml
 local.properties
 .DS_Store
+android/keystore.properties
+android/convertpixels-release.jks
