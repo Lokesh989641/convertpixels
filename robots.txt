@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://YOUR-GITHUB-USERNAME.github.io/convertpixels/sitemap.xml
+Sitemap: https://lokesh989641.github.io/convertpixels/sitemap.xml

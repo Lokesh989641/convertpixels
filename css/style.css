@@ -303,4 +303,8 @@ body{
     .footer-content{
         flex-direction:column;
     }
+}html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
 }
