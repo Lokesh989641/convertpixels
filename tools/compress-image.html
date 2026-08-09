@@ -4,8 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Compress Image Online - ConvertPixels</title>
-    <meta name="description" content="Compress JPG and PNG images online for free. Reduce image file size quickly with ConvertPixels.">
+    <title>Compress Image Online - Reduce Image Size for Free | ConvertPixels</title>
+
+    <meta
+        name="description"
+        content="Compress JPG, PNG and other images online for free. Reduce image file size quickly while keeping good image quality."
+    >
+
+    <meta name="robots" content="index, follow">
+
+    <link
+        rel="canonical"
+        href="https://lokesh989641.github.io/convertpixels/tools/compress-image.html"
+    >
 
     <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -19,7 +30,7 @@
         <ul class="nav-links">
             <li><a href="../index.html">Home</a></li>
             <li><a href="../index.html#tools">Tools</a></li>
-            <li><a href="#">About</a></li>
+            <li><a href="../about.html">About</a></li>
         </ul>
     </nav>
 </header>
@@ -29,58 +40,69 @@
     <h1>Compress Image Online</h1>
 
     <p class="converter-description">
-        Reduce JPG and PNG image file sizes while keeping good quality.
+        Reduce image file size online for free.
     </p>
 
     <div class="converter-box">
 
         <label for="imageInput" class="upload-area">
-            <span>🗜️</span>
+            <span>📁</span>
             <strong>Choose an image</strong>
-            <small>Select a JPG or PNG file</small>
+            <small>Select a JPG, PNG or supported image file</small>
         </label>
 
         <input
             type="file"
             id="imageInput"
-            accept="image/jpeg,image/png"
+            accept="image/*"
         >
 
         <div id="preview"></div>
 
-        <div class="quality-control">
-            <label for="quality">
-                Quality: <strong id="qualityValue">80%</strong>
-            </label>
-
-            <input
-                type="range"
-                id="quality"
-                min="10"
-                max="100"
-                value="80"
-            >
-        </div>
-
         <button id="compressBtn" disabled>
             Compress Image
         </button>
-
-        <div id="result"></div>
 
         <a
             id="downloadBtn"
             class="download-btn"
             style="display:none;"
         >
-            Download Compressed Image
+            Download Image
         </a>
 
     </div>
 
+    <section class="seo-content">
+
+        <h2>Compress Images Online</h2>
+
+        <p>
+            ConvertPixels helps you reduce image file size quickly and
+            easily. Upload an image, compress it and download the smaller
+            file.
+        </p>
+
+        <h2>How to Compress an Image</h2>
+
+        <p>
+            Select your image, click the compression button and download
+            the compressed image when processing is complete.
+        </p>
+
+        <h2>Why Compress Images?</h2>
+
+        <p>
+            Smaller image files can use less storage and can be easier to
+            upload, share and use on websites.
+        </p>
+
+    </section>
+
 </main>
 
 <script src="../js/compress-image.js"></script>
+<script src="../js/script.js"></script>
 
 </body>
 </html>
