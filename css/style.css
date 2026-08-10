@@ -410,3 +410,59 @@ body {
     color: #2563eb;
     text-decoration: none;
 }
+/* Tool page improvements */
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2563eb;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.logo:hover {
+    color: #1d4ed8;
+}
+
+.upload-icon {
+    display: block;
+    font-size: 42px;
+    line-height: 1;
+    margin-bottom: 12px;
+}
+
+.seo-content {
+    max-width: 900px;
+    margin: 50px auto 70px;
+    padding: 0 20px;
+    text-align: left;
+}
+
+.seo-content h2 {
+    font-size: 26px;
+    margin-top: 35px;
+    margin-bottom: 12px;
+    color: #111827;
+}
+
+.seo-content h2:first-child {
+    margin-top: 0;
+}
+
+.seo-content p {
+    color: #4b5563;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .seo-content {
+        margin-top: 35px;
+        margin-bottom: 50px;
+    }
+
+    .seo-content h2 {
+        font-size: 22px;
+    }
+}
