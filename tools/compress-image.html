@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Compress Image Online - Reduce Image Size for Free | ConvertPixels</title>
@@ -24,8 +26,8 @@
 <body>
 
 <header>
-    <nav class="navbar">
-        <a href="../index.html" class="logo">ConvertPixels</a>
+    <nav>
+        <div class="logo">ConvertPixels</div>
 
         <ul class="nav-links">
             <li><a href="../index.html">Home</a></li>
@@ -35,7 +37,7 @@
     </nav>
 </header>
 
-<main class="converter-page">
+<main>
 
     <h1>Compress Image Online</h1>
 
@@ -59,9 +61,24 @@
 
         <div id="preview"></div>
 
+        <label for="quality">
+            Quality:
+            <span id="qualityValue">80%</span>
+        </label>
+
+        <input
+            type="range"
+            id="quality"
+            min="10"
+            max="100"
+            value="80"
+        >
+
         <button id="compressBtn" disabled>
             Compress Image
         </button>
+
+        <div id="result"></div>
 
         <a
             id="downloadBtn"
@@ -86,8 +103,8 @@
         <h2>How to Compress an Image</h2>
 
         <p>
-            Select your image, click the compression button and download
-            the compressed image when processing is complete.
+            Select your image, choose the quality level, click the
+            compression button and download the compressed image.
         </p>
 
         <h2>Why Compress Images?</h2>
@@ -105,4 +122,5 @@
 <script src="../js/script.js"></script>
 
 </body>
+
 </html>

@@ -7,6 +7,8 @@ const preview = document.getElementById("preview");
 const result = document.getElementById("result");
 
 let selectedImage = null;
+let previewURL = null;
+let downloadURL = null;
 
 quality.addEventListener("input", () => {
     qualityValue.textContent = `${quality.value}%`;
@@ -19,14 +21,24 @@ imageInput.addEventListener("change", () => {
 
     selectedImage = file;
 
-    const imageURL = URL.createObjectURL(file);
+    if (previewURL) {
+        URL.revokeObjectURL(previewURL);
+    }
 
-    preview.innerHTML = `
-        <img src="${imageURL}" alt="Selected image">
-        <p>${file.name} — ${formatBytes(file.size)}</p>
-    `;
+    previewURL = URL.createObjectURL(file);
 
-    result.innerHTML = "";
+    preview.replaceChildren();
+
+    const img = document.createElement("img");
+    img.src = previewURL;
+    img.alt = "Selected image";
+
+    const fileInfo = document.createElement("p");
+    fileInfo.textContent = `${file.name} — ${formatBytes(file.size)}`;
+
+    preview.append(img, fileInfo);
+
+    result.replaceChildren();
     downloadBtn.style.display = "none";
     compressBtn.disabled = false;
 });
@@ -49,17 +61,17 @@ compressBtn.addEventListener("click", () => {
             (blob) => {
                 if (!blob) return;
 
-                const downloadURL = URL.createObjectURL(blob);
+                if (downloadURL) {
+                    URL.revokeObjectURL(downloadURL);
+                }
 
-                const extension = selectedImage.type === "image/png"
-                    ? "jpg"
-                    : "jpg";
+                downloadURL = URL.createObjectURL(blob);
 
                 const originalName = selectedImage.name
                     .replace(/\.[^/.]+$/, "");
 
                 downloadBtn.href = downloadURL;
-                downloadBtn.download = `${originalName}-compressed.${extension}`;
+                downloadBtn.download = `${originalName}-compressed.jpg`;
                 downloadBtn.style.display = "inline-block";
 
                 const reduction = Math.max(
@@ -67,17 +79,21 @@ compressBtn.addEventListener("click", () => {
                     ((selectedImage.size - blob.size) / selectedImage.size) * 100
                 );
 
-                result.innerHTML = `
-                    <p>
-                        Original: ${formatBytes(selectedImage.size)}
-                    </p>
-                    <p>
-                        Compressed: ${formatBytes(blob.size)}
-                    </p>
-                    <p>
-                        Size reduction: ${reduction.toFixed(1)}%
-                    </p>
-                `;
+                result.replaceChildren();
+
+                const original = document.createElement("p");
+                original.textContent =
+                    `Original: ${formatBytes(selectedImage.size)}`;
+
+                const compressed = document.createElement("p");
+                compressed.textContent =
+                    `Compressed: ${formatBytes(blob.size)}`;
+
+                const reductionText = document.createElement("p");
+                reductionText.textContent =
+                    `Size reduction: ${reduction.toFixed(1)}%`;
+
+                result.append(original, compressed, reductionText);
             },
             "image/jpeg",
             Number(quality.value) / 100
