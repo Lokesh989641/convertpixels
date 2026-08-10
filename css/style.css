@@ -376,4 +376,31 @@ body {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
+}/* Converter page layout */
+.converter-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+/* Converter page heading */
+.converter-page h1 {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+.converter-description {
+    color: #666;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+/* Keep converter content centered */
+.converter-box {
+    width: 100%;
+    background: #fff;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
 }
