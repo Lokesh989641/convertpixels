@@ -345,4 +345,35 @@ body {
 .tool-card p {
     color: #666;
     line-height: 1.6;
+}/* Tool action buttons */
+#convertBtn,
+#compressBtn,
+#resizeBtn {
+    border: none;
+    margin-top: 30px;
+    padding: 14px 28px;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.2s ease;
+}
+
+#convertBtn:hover:not(:disabled),
+#compressBtn:hover:not(:disabled),
+#resizeBtn:hover:not(:disabled) {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+#convertBtn:disabled,
+#compressBtn:disabled,
+#resizeBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
