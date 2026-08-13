@@ -28,10 +28,10 @@
 
 
     <!-- ============================= -->
-    <!-- Google Tag / Google Analytics -->
+    <!-- Google Analytics 4 -->
     <!-- ============================= -->
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9MZFTJRBGQ"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9MZFTJRGBQ"></script>
 
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -42,23 +42,7 @@
 
         gtag('js', new Date());
 
-        /*
-         * Google Consent Mode
-         *
-         * Analytics is allowed for this site.
-         * Advertising-related storage remains denied.
-         */
-        gtag('consent', 'default', {
-            analytics_storage: 'granted',
-            ad_storage: 'denied',
-            ad_user_data: 'denied',
-            ad_personalization: 'denied'
-        });
-
-        /*
-         * Google Analytics 4
-         */
-        gtag('config', 'G-9MZFTJRBGQ', {
+        gtag('config', 'G-9MZFTJRGBQ', {
             debug_mode: true
         });
     </script>
@@ -80,6 +64,7 @@
             </a>
 
             <ul class="nav-links">
+
                 <li>
                     <a href="index.html">Home</a>
                 </li>
@@ -91,6 +76,7 @@
                 <li>
                     <a href="about.html">About</a>
                 </li>
+
             </ul>
 
         </nav>
@@ -102,8 +88,6 @@
     <!-- ============================= -->
 
     <main>
-
-        <!-- Hero Section -->
 
         <section class="hero">
 
@@ -132,8 +116,6 @@
 
             <div class="tools-grid">
 
-                <!-- Image to PDF -->
-
                 <a
                     href="tools/image-to-pdf.html"
                     class="tool-card"
@@ -147,8 +129,6 @@
                     </p>
                 </a>
 
-
-                <!-- PNG to JPG -->
 
                 <a
                     href="tools/png-to-jpg.html"
@@ -164,8 +144,6 @@
                 </a>
 
 
-                <!-- JPG to PNG -->
-
                 <a
                     href="tools/jpg-to-png.html"
                     class="tool-card"
@@ -179,8 +157,6 @@
                     </p>
                 </a>
 
-
-                <!-- JPG to WebP -->
 
                 <a
                     href="tools/jpg-to-webp.html"
@@ -196,8 +172,6 @@
                 </a>
 
 
-                <!-- WebP to JPG -->
-
                 <a
                     href="tools/webp-to-jpg.html"
                     class="tool-card"
@@ -212,8 +186,6 @@
                 </a>
 
 
-                <!-- Compress Image -->
-
                 <a
                     href="tools/compress-image.html"
                     class="tool-card"
@@ -227,8 +199,6 @@
                     </p>
                 </a>
 
-
-                <!-- Resize Image -->
 
                 <a
                     href="tools/resize-image.html"
@@ -270,6 +240,5 @@
 </body>
 
 </html>
-
 
 
