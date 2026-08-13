@@ -16,29 +16,20 @@ let downloadURL = null;
 imageInput.addEventListener("change", () => {
     const file = imageInput.files[0];
 
-    if (!file) {
-        selectedImage = null;
-        resizeBtn.disabled = true;
-        return;
-    }
+    if (!file) return;
 
     selectedImage = file;
 
-    // Clean up previous preview URL
     if (previewURL) {
         URL.revokeObjectURL(previewURL);
-        previewURL = null;
     }
 
-    // Clean up previous download URL
     if (downloadURL) {
         URL.revokeObjectURL(downloadURL);
         downloadURL = null;
     }
 
-    resizeBtn.disabled = true;
     downloadBtn.style.display = "none";
-    downloadBtn.removeAttribute("href");
 
     previewURL = URL.createObjectURL(file);
 
@@ -47,12 +38,6 @@ imageInput.addEventListener("change", () => {
     image.onload = () => {
         originalWidth = image.width;
         originalHeight = image.height;
-
-        if (originalWidth < 1 || originalHeight < 1) {
-            alert("Unable to determine image dimensions.");
-            return;
-        }
-
         aspectRatio = originalWidth / originalHeight;
 
         widthInput.value = originalWidth;
@@ -74,42 +59,26 @@ imageInput.addEventListener("change", () => {
     };
 
     image.onerror = () => {
-        if (previewURL) {
-            URL.revokeObjectURL(previewURL);
-            previewURL = null;
-        }
-
-        selectedImage = null;
+        URL.revokeObjectURL(previewURL);
+        previewURL = null;
         resizeBtn.disabled = true;
-
-        alert("Unable to load this image.");
     };
 
     image.src = previewURL;
 });
 
 widthInput.addEventListener("input", () => {
-    if (!lockRatio.checked) return;
-
-    const width = Number(widthInput.value);
-
-    if (width > 0 && aspectRatio > 0) {
-        heightInput.value = Math.max(
-            1,
-            Math.round(width / aspectRatio)
+    if (lockRatio.checked && widthInput.value && aspectRatio) {
+        heightInput.value = Math.round(
+            Number(widthInput.value) / aspectRatio
         );
     }
 });
 
 heightInput.addEventListener("input", () => {
-    if (!lockRatio.checked) return;
-
-    const height = Number(heightInput.value);
-
-    if (height > 0 && aspectRatio > 0) {
-        widthInput.value = Math.max(
-            1,
-            Math.round(height * aspectRatio)
+    if (lockRatio.checked && heightInput.value && aspectRatio) {
+        widthInput.value = Math.round(
+            Number(heightInput.value) * aspectRatio
         );
     }
 });
@@ -120,23 +89,15 @@ resizeBtn.addEventListener("click", () => {
     const width = Number(widthInput.value);
     const height = Number(heightInput.value);
 
-    if (
-        !Number.isFinite(width) ||
-        !Number.isFinite(height) ||
-        width < 1 ||
-        height < 1
-    ) {
-        alert("Please enter valid width and height values.");
+    if (!Number.isFinite(width) || !Number.isFinite(height)) {
         return;
     }
 
-    if (!Number.isInteger(width) || !Number.isInteger(height)) {
-        alert("Width and height must be whole numbers.");
+    if (width < 1 || height < 1) {
         return;
     }
 
     resizeBtn.disabled = true;
-    resizeBtn.textContent = "Resizing...";
 
     const image = new Image();
     const imageURL = URL.createObjectURL(selectedImage);
@@ -149,8 +110,6 @@ resizeBtn.addEventListener("click", () => {
 
         if (!context) {
             resizeBtn.disabled = false;
-            resizeBtn.textContent = "Resize Image";
-            alert("Unable to process this image.");
             return;
         }
 
@@ -170,54 +129,43 @@ resizeBtn.addEventListener("click", () => {
                 ? "image/png"
                 : "image/jpeg";
 
-        canvas.toBlob(
-            (blob) => {
-                resizeBtn.disabled = false;
-                resizeBtn.textContent = "Resize Image";
+        canvas.toBlob((blob) => {
+            resizeBtn.disabled = false;
 
-                if (!blob) {
-                    alert("Unable to create the resized image.");
-                    return;
-                }
+            if (!blob) return;
 
-                if (downloadURL) {
-                    URL.revokeObjectURL(downloadURL);
-                }
+            if (downloadURL) {
+                URL.revokeObjectURL(downloadURL);
+            }
 
-                downloadURL = URL.createObjectURL(blob);
+            downloadURL = URL.createObjectURL(blob);
 
-                const extension =
-                    outputType === "image/png"
-                        ? "png"
-                        : "jpg";
+            const extension =
+                outputType === "image/png"
+                    ? "png"
+                    : "jpg";
 
-                const name = selectedImage.name
-                    .replace(/\.[^/.]+$/, "");
+            const name = selectedImage.name.replace(
+                /\.[^/.]+$/,
+                ""
+            );
 
-                downloadBtn.href = downloadURL;
-                downloadBtn.download =
-                    `${name}-resized.${extension}`;
+            downloadBtn.href = downloadURL;
+            downloadBtn.download =
+                `${name}-resized.${extension}`;
 
-                downloadBtn.style.display = "inline-block";
-            },
-            outputType,
-            0.92
-        );
+            downloadBtn.style.display = "inline-block";
+        }, outputType, 0.92);
     };
 
     image.onerror = () => {
         URL.revokeObjectURL(imageURL);
-
         resizeBtn.disabled = false;
-        resizeBtn.textContent = "Resize Image";
-
-        alert("Unable to load this image.");
     };
 
     image.src = imageURL;
 });
 
-// Clean up object URLs when leaving the page
 window.addEventListener("beforeunload", () => {
     if (previewURL) {
         URL.revokeObjectURL(previewURL);
