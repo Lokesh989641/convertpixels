@@ -24,15 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
     links.className = "footer-links";
 
     const about = document.createElement("a");
-    about.href = "../about.html";
+    about.href = "/convertpixels/about.html";
+
     about.textContent = "About";
 
     const privacy = document.createElement("a");
-    privacy.href = "../privacy.html";
+    privacy.href = "/convertpixels/privacy.html";
     privacy.textContent = "Privacy Policy";
 
     const terms = document.createElement("a");
-    terms.href = "../terms.html";
+    terms.href = "/convertpixels/terms.html";
     terms.textContent = "Terms of Service";
 
     links.append(about, privacy, terms);
