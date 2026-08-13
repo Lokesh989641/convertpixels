@@ -10,17 +10,32 @@ let downloadURL = null;
 imageInput.addEventListener("change", () => {
     const file = imageInput.files[0];
 
-    if (!file) return;
+    if (!file) {
+        selectedImage = null;
+        convertBtn.disabled = true;
+        return;
+    }
 
     selectedImage = file;
 
+    // Clean up previous preview
     if (previewURL) {
         URL.revokeObjectURL(previewURL);
+        previewURL = null;
+    }
+
+    // Clean up previous download
+    if (downloadURL) {
+        URL.revokeObjectURL(downloadURL);
+        downloadURL = null;
     }
 
     previewURL = URL.createObjectURL(file);
 
     preview.replaceChildren();
+
+    downloadBtn.style.display = "none";
+    downloadBtn.removeAttribute("href");
 
     const image = document.createElement("img");
     image.src = previewURL;
@@ -32,11 +47,13 @@ imageInput.addEventListener("change", () => {
     preview.append(image, fileInfo);
 
     convertBtn.disabled = false;
-    downloadBtn.style.display = "none";
 });
 
 convertBtn.addEventListener("click", () => {
     if (!selectedImage) return;
+
+    convertBtn.disabled = true;
+    convertBtn.textContent = "Converting...";
 
     const image = new Image();
     const imageURL = URL.createObjectURL(selectedImage);
@@ -51,33 +68,62 @@ convertBtn.addEventListener("click", () => {
 
         const context = canvas.getContext("2d");
 
-        if (!context) return;
+        if (!context) {
+            convertBtn.disabled = false;
+            convertBtn.textContent = "Convert to WebP";
+            alert("Unable to process this image.");
+            return;
+        }
 
         context.drawImage(image, 0, 0);
 
-        canvas.toBlob((blob) => {
-            if (!blob) return;
+        canvas.toBlob(
+            (blob) => {
+                convertBtn.disabled = false;
+                convertBtn.textContent = "Convert to WebP";
 
-            if (downloadURL) {
-                URL.revokeObjectURL(downloadURL);
-            }
+                if (!blob) {
+                    alert("Unable to convert this image to WebP.");
+                    return;
+                }
 
-            downloadURL = URL.createObjectURL(blob);
+                if (downloadURL) {
+                    URL.revokeObjectURL(downloadURL);
+                }
 
-            const name = selectedImage.name.replace(
-                /\.jpe?g$/i,
-                ""
-            );
+                downloadURL = URL.createObjectURL(blob);
 
-            downloadBtn.href = downloadURL;
-            downloadBtn.download = `${name}.webp`;
-            downloadBtn.style.display = "inline-block";
-        }, "image/webp", 0.92);
+                const originalName = selectedImage.name
+                    .replace(/\.[^/.]+$/, "");
+
+                downloadBtn.href = downloadURL;
+                downloadBtn.download = `${originalName}.webp`;
+                downloadBtn.style.display = "inline-block";
+            },
+            "image/webp",
+            0.92
+        );
     };
 
     image.onerror = () => {
         URL.revokeObjectURL(imageURL);
+
+        convertBtn.disabled = false;
+        convertBtn.textContent = "Convert to WebP";
+
+        alert("Unable to load this JPG image.");
     };
 
     image.src = imageURL;
+});
+
+// Clean up object URLs when leaving the page
+window.addEventListener("beforeunload", () => {
+    if (previewURL) {
+        URL.revokeObjectURL(previewURL);
+    }
+
+    if (downloadURL) {
+        URL.revokeObjectURL(downloadURL);
+    }
 });

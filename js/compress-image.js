@@ -17,17 +17,31 @@ quality.addEventListener("input", () => {
 imageInput.addEventListener("change", () => {
     const file = imageInput.files[0];
 
-    if (!file) return;
+    if (!file) {
+        selectedImage = null;
+        compressBtn.disabled = true;
+        return;
+    }
 
     selectedImage = file;
 
     if (previewURL) {
         URL.revokeObjectURL(previewURL);
+        previewURL = null;
+    }
+
+    if (downloadURL) {
+        URL.revokeObjectURL(downloadURL);
+        downloadURL = null;
     }
 
     previewURL = URL.createObjectURL(file);
 
     preview.replaceChildren();
+    result.replaceChildren();
+
+    downloadBtn.style.display = "none";
+    downloadBtn.removeAttribute("href");
 
     const img = document.createElement("img");
     img.src = previewURL;
@@ -38,19 +52,36 @@ imageInput.addEventListener("change", () => {
 
     preview.append(img, fileInfo);
 
-    result.replaceChildren();
-    downloadBtn.style.display = "none";
     compressBtn.disabled = false;
 });
 
 compressBtn.addEventListener("click", () => {
     if (!selectedImage) return;
 
+    compressBtn.disabled = true;
+
+    if (downloadURL) {
+        URL.revokeObjectURL(downloadURL);
+        downloadURL = null;
+    }
+
+    downloadBtn.style.display = "none";
+    downloadBtn.removeAttribute("href");
+
     const image = new Image();
+    const imageURL = URL.createObjectURL(selectedImage);
 
     image.onload = () => {
+        URL.revokeObjectURL(imageURL);
+
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
+
+        if (!context) {
+            compressBtn.disabled = false;
+            result.textContent = "Unable to process this image.";
+            return;
+        }
 
         canvas.width = image.width;
         canvas.height = image.height;
@@ -59,10 +90,11 @@ compressBtn.addEventListener("click", () => {
 
         canvas.toBlob(
             (blob) => {
-                if (!blob) return;
+                compressBtn.disabled = false;
 
-                if (downloadURL) {
-                    URL.revokeObjectURL(downloadURL);
+                if (!blob) {
+                    result.textContent = "Unable to compress this image.";
+                    return;
                 }
 
                 downloadURL = URL.createObjectURL(blob);
@@ -93,21 +125,35 @@ compressBtn.addEventListener("click", () => {
                 reductionText.textContent =
                     `Size reduction: ${reduction.toFixed(1)}%`;
 
-                result.append(original, compressed, reductionText);
+                result.append(
+                    original,
+                    compressed,
+                    reductionText
+                );
             },
             "image/jpeg",
             Number(quality.value) / 100
         );
     };
 
-    image.src = URL.createObjectURL(selectedImage);
+    image.onerror = () => {
+        URL.revokeObjectURL(imageURL);
+        compressBtn.disabled = false;
+        result.textContent = "Unable to load this image.";
+    };
+
+    image.src = imageURL;
 });
 
 function formatBytes(bytes) {
     if (bytes === 0) return "0 Bytes";
 
-    const units = ["Bytes", "KB", "MB", "GB"];
-    const index = Math.floor(Math.log(bytes) / Math.log(1024));
+    const units = ["Bytes", "KB", "MB", "GB", "TB"];
+
+    const index = Math.min(
+        Math.floor(Math.log(bytes) / Math.log(1024)),
+        units.length - 1
+    );
 
     return `${(bytes / Math.pow(1024, index)).toFixed(2)} ${units[index]}`;
 }

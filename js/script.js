@@ -23,17 +23,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const links = document.createElement("div");
     links.className = "footer-links";
 
-    const about = document.createElement("a");
-    about.href = "/convertpixels/about.html";
+    const isToolsPage = window.location.pathname.includes("/tools/");
 
+    const about = document.createElement("a");
+    about.href = isToolsPage ? "../about.html" : "about.html";
     about.textContent = "About";
 
     const privacy = document.createElement("a");
-    privacy.href = "/convertpixels/privacy.html";
+    privacy.href = isToolsPage ? "../privacy.html" : "privacy.html";
     privacy.textContent = "Privacy Policy";
 
     const terms = document.createElement("a");
-    terms.href = "/convertpixels/terms.html";
+    terms.href = isToolsPage ? "../terms.html" : "terms.html";
     terms.textContent = "Terms of Service";
 
     links.append(about, privacy, terms);

@@ -16,13 +16,29 @@ let downloadURL = null;
 imageInput.addEventListener("change", () => {
     const file = imageInput.files[0];
 
-    if (!file) return;
+    if (!file) {
+        selectedImage = null;
+        resizeBtn.disabled = true;
+        return;
+    }
 
     selectedImage = file;
 
+    // Clean up previous preview URL
     if (previewURL) {
         URL.revokeObjectURL(previewURL);
+        previewURL = null;
     }
+
+    // Clean up previous download URL
+    if (downloadURL) {
+        URL.revokeObjectURL(downloadURL);
+        downloadURL = null;
+    }
+
+    resizeBtn.disabled = true;
+    downloadBtn.style.display = "none";
+    downloadBtn.removeAttribute("href");
 
     previewURL = URL.createObjectURL(file);
 
@@ -31,6 +47,12 @@ imageInput.addEventListener("change", () => {
     image.onload = () => {
         originalWidth = image.width;
         originalHeight = image.height;
+
+        if (originalWidth < 1 || originalHeight < 1) {
+            alert("Unable to determine image dimensions.");
+            return;
+        }
+
         aspectRatio = originalWidth / originalHeight;
 
         widthInput.value = originalWidth;
@@ -43,34 +65,51 @@ imageInput.addEventListener("change", () => {
         previewImage.alt = "Selected image";
 
         const dimensions = document.createElement("p");
-        dimensions.textContent = `${originalWidth} × ${originalHeight}px`;
+        dimensions.textContent =
+            `${originalWidth} × ${originalHeight}px`;
 
         preview.append(previewImage, dimensions);
 
         resizeBtn.disabled = false;
-        downloadBtn.style.display = "none";
     };
 
     image.onerror = () => {
-        URL.revokeObjectURL(previewURL);
-        previewURL = null;
+        if (previewURL) {
+            URL.revokeObjectURL(previewURL);
+            previewURL = null;
+        }
+
+        selectedImage = null;
+        resizeBtn.disabled = true;
+
+        alert("Unable to load this image.");
     };
 
     image.src = previewURL;
 });
 
 widthInput.addEventListener("input", () => {
-    if (lockRatio.checked && widthInput.value) {
-        heightInput.value = Math.round(
-            Number(widthInput.value) / aspectRatio
+    if (!lockRatio.checked) return;
+
+    const width = Number(widthInput.value);
+
+    if (width > 0 && aspectRatio > 0) {
+        heightInput.value = Math.max(
+            1,
+            Math.round(width / aspectRatio)
         );
     }
 });
 
 heightInput.addEventListener("input", () => {
-    if (lockRatio.checked && heightInput.value) {
-        widthInput.value = Math.round(
-            Number(heightInput.value) * aspectRatio
+    if (!lockRatio.checked) return;
+
+    const height = Number(heightInput.value);
+
+    if (height > 0 && aspectRatio > 0) {
+        widthInput.value = Math.max(
+            1,
+            Math.round(height * aspectRatio)
         );
     }
 });
@@ -81,7 +120,23 @@ resizeBtn.addEventListener("click", () => {
     const width = Number(widthInput.value);
     const height = Number(heightInput.value);
 
-    if (width < 1 || height < 1) return;
+    if (
+        !Number.isFinite(width) ||
+        !Number.isFinite(height) ||
+        width < 1 ||
+        height < 1
+    ) {
+        alert("Please enter valid width and height values.");
+        return;
+    }
+
+    if (!Number.isInteger(width) || !Number.isInteger(height)) {
+        alert("Width and height must be whole numbers.");
+        return;
+    }
+
+    resizeBtn.disabled = true;
+    resizeBtn.textContent = "Resizing...";
 
     const image = new Image();
     const imageURL = URL.createObjectURL(selectedImage);
@@ -92,43 +147,83 @@ resizeBtn.addEventListener("click", () => {
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
 
-        if (!context) return;
+        if (!context) {
+            resizeBtn.disabled = false;
+            resizeBtn.textContent = "Resize Image";
+            alert("Unable to process this image.");
+            return;
+        }
 
         canvas.width = width;
         canvas.height = height;
 
-        context.drawImage(image, 0, 0, width, height);
+        context.drawImage(
+            image,
+            0,
+            0,
+            width,
+            height
+        );
 
-        canvas.toBlob((blob) => {
-            if (!blob) return;
+        const outputType =
+            selectedImage.type === "image/png"
+                ? "image/png"
+                : "image/jpeg";
 
-            if (downloadURL) {
-                URL.revokeObjectURL(downloadURL);
-            }
+        canvas.toBlob(
+            (blob) => {
+                resizeBtn.disabled = false;
+                resizeBtn.textContent = "Resize Image";
 
-            downloadURL = URL.createObjectURL(blob);
+                if (!blob) {
+                    alert("Unable to create the resized image.");
+                    return;
+                }
 
-            const extension =
-                selectedImage.type === "image/png"
-                    ? "png"
-                    : "jpg";
+                if (downloadURL) {
+                    URL.revokeObjectURL(downloadURL);
+                }
 
-            const name = selectedImage.name.replace(
-                /\.[^/.]+$/,
-                ""
-            );
+                downloadURL = URL.createObjectURL(blob);
 
-            downloadBtn.href = downloadURL;
-            downloadBtn.download =
-                `${name}-resized.${extension}`;
+                const extension =
+                    outputType === "image/png"
+                        ? "png"
+                        : "jpg";
 
-            downloadBtn.style.display = "inline-block";
-        }, selectedImage.type);
+                const name = selectedImage.name
+                    .replace(/\.[^/.]+$/, "");
+
+                downloadBtn.href = downloadURL;
+                downloadBtn.download =
+                    `${name}-resized.${extension}`;
+
+                downloadBtn.style.display = "inline-block";
+            },
+            outputType,
+            0.92
+        );
     };
 
     image.onerror = () => {
         URL.revokeObjectURL(imageURL);
+
+        resizeBtn.disabled = false;
+        resizeBtn.textContent = "Resize Image";
+
+        alert("Unable to load this image.");
     };
 
     image.src = imageURL;
+});
+
+// Clean up object URLs when leaving the page
+window.addEventListener("beforeunload", () => {
+    if (previewURL) {
+        URL.revokeObjectURL(previewURL);
+    }
+
+    if (downloadURL) {
+        URL.revokeObjectURL(downloadURL);
+    }
 });

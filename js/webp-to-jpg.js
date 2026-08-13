@@ -10,12 +10,21 @@ let downloadURL = null;
 imageInput.addEventListener("change", () => {
     const file = imageInput.files[0];
 
-    if (!file) return;
+    if (!file) {
+        return;
+    }
 
     selectedImage = file;
 
+    // Clean up old preview URL
     if (previewURL) {
         URL.revokeObjectURL(previewURL);
+    }
+
+    // Clean up previous download
+    if (downloadURL) {
+        URL.revokeObjectURL(downloadURL);
+        downloadURL = null;
     }
 
     previewURL = URL.createObjectURL(file);
@@ -33,10 +42,16 @@ imageInput.addEventListener("change", () => {
 
     convertBtn.disabled = false;
     downloadBtn.style.display = "none";
+    downloadBtn.removeAttribute("href");
 });
 
 convertBtn.addEventListener("click", () => {
-    if (!selectedImage) return;
+    if (!selectedImage) {
+        return;
+    }
+
+    convertBtn.disabled = true;
+    convertBtn.textContent = "Converting...";
 
     const image = new Image();
     const imageURL = URL.createObjectURL(selectedImage);
@@ -51,36 +66,65 @@ convertBtn.addEventListener("click", () => {
 
         const context = canvas.getContext("2d");
 
-        if (!context) return;
+        if (!context) {
+            convertBtn.disabled = false;
+            convertBtn.textContent = "Convert to JPG";
+            return;
+        }
 
+        // JPG does not support transparency.
+        // Use a white background for transparent WebP images.
         context.fillStyle = "#ffffff";
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         context.drawImage(image, 0, 0);
 
-        canvas.toBlob((blob) => {
-            if (!blob) return;
+        canvas.toBlob(
+            (blob) => {
+                convertBtn.disabled = false;
+                convertBtn.textContent = "Convert to JPG";
 
-            if (downloadURL) {
-                URL.revokeObjectURL(downloadURL);
-            }
+                if (!blob) {
+                    return;
+                }
 
-            downloadURL = URL.createObjectURL(blob);
+                if (downloadURL) {
+                    URL.revokeObjectURL(downloadURL);
+                }
 
-            const name = selectedImage.name.replace(
-                /\.webp$/i,
-                ""
-            );
+                downloadURL = URL.createObjectURL(blob);
 
-            downloadBtn.href = downloadURL;
-            downloadBtn.download = `${name}.jpg`;
-            downloadBtn.style.display = "inline-block";
-        }, "image/jpeg", 0.92);
+                const name = selectedImage.name.replace(
+                    /\.webp$/i,
+                    ""
+                );
+
+                downloadBtn.href = downloadURL;
+                downloadBtn.download = `${name}.jpg`;
+                downloadBtn.style.display = "inline-block";
+            },
+            "image/jpeg",
+            0.92
+        );
     };
 
     image.onerror = () => {
         URL.revokeObjectURL(imageURL);
+
+        convertBtn.disabled = false;
+        convertBtn.textContent = "Convert to JPG";
     };
 
     image.src = imageURL;
+});
+
+// Clean up object URLs when leaving the page
+window.addEventListener("beforeunload", () => {
+    if (previewURL) {
+        URL.revokeObjectURL(previewURL);
+    }
+
+    if (downloadURL) {
+        URL.revokeObjectURL(downloadURL);
+    }
 });
